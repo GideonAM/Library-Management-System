@@ -19,6 +19,7 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
@@ -115,10 +116,25 @@ public class DashboardController implements Initializable {
 
     @FXML
     private ComboBox<String> take_transactionType;
+    @FXML
+    private TableColumn<ReturnBook, String> return_Author;
+    @FXML
+    private TableColumn<ReturnBook, String> return_BookTitle;
+    @FXML
+    private TableColumn<ReturnBook, String> return_BookType;
+    @FXML
+    private TableColumn<ReturnBook, String> return_DateIssued;
+    @FXML
+    private TableView<ReturnBook> return_TableView;
+    @FXML
+    private Button return_button;
+
 
     private Connection connection;
     private PreparedStatement preparedStatement;
     private ResultSet resultSet;
+    private Statement statement;
+
     private ObservableList<AvailableBooks> listBooks;
 
     private final String [] transactionType = {"BORROW", "RETURN"};
@@ -130,7 +146,12 @@ public class DashboardController implements Initializable {
     }
 
     public void takeBook() {
-        String sql = "INSERT INTO transaction VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = """
+                INSERT INTO transaction
+                (transactionType, patronEmail, bookTitle, author, date, checkReturn)
+                VALUES (?, ?, ?, ?, ?, ?)
+                """;
+
         connection = DatabaseConnection.connection();
 
         Date date = new Date();
@@ -170,10 +191,89 @@ public class DashboardController implements Initializable {
                 alert.setTitle("Message");
                 alert.setContentText("Book borrowed successfully");
                 alert.showAndWait();
+
+                clearTakeData();
             }
         } catch (Exception exception) {
             exception.printStackTrace();
         }
+    }
+
+    public ObservableList<ReturnBook> returnBookData() {
+        ObservableList<ReturnBook> listReturnBook = FXCollections.observableArrayList();
+
+        String checkReturn = "Borrowed";
+        String sql = "SELECT * FROM transaction " +
+                "WHERE checkReturn = '" + checkReturn + "' AND patronEmail = '" + GetData.patronEmail + "'";
+        connection = DatabaseConnection.connection();
+
+        try {
+            ReturnBook returnBooks;
+            preparedStatement = connection.prepareStatement(sql);
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                returnBooks = new ReturnBook(resultSet.getString("bookTitle"),
+                        resultSet.getString("author"),
+                        resultSet.getDate("date"));
+
+                listReturnBook.add(returnBooks);
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+
+        return listReturnBook;
+    }
+
+    private void showReturnBooks() {
+        ObservableList<ReturnBook> returnBooks;
+        returnBooks = returnBookData();
+        return_BookTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
+        return_Author.setCellValueFactory(new PropertyValueFactory<>("author"));
+        return_DateIssued.setCellValueFactory(new PropertyValueFactory<>("date"));
+
+        return_TableView.setItems(returnBooks);
+    }
+
+    public void selectReturnBook() {
+        ReturnBook returnBook = return_TableView.getSelectionModel().getSelectedItem();
+        int num = return_TableView.getSelectionModel().getFocusedIndex();
+
+        if ((num - 1) < -1)
+            return;
+
+        GetData.takeBookTitle = returnBook.getTitle();
+    }
+
+    public void returnBook() {
+        String sql = "UPDATE transaction SET checkReturn = 'Returned' WHERE bookTitle = '" + GetData.takeBookTitle + "'";
+        connection = DatabaseConnection.connection();
+
+        Alert alert;
+        try {
+
+            if (return_BookTitle.getText() == null) {
+                alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Message");
+                alert.setHeaderText(null);
+                alert.setContentText("Select the book you want to return");
+                alert.showAndWait();
+            } else {
+                statement = connection.createStatement();
+                statement.execute(sql);
+
+                alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Message");
+                alert.setHeaderText(null);
+                alert.setContentText("Book returned successfully");
+                alert.showAndWait();
+            }
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+
     }
 
     public void findBook(ActionEvent event) {
@@ -303,7 +403,7 @@ public class DashboardController implements Initializable {
             returnBooks_form.setVisible(false);
 
         } else if (event.getSource() == issuedBooks_btn) {
-            currentForm_label.setText("Issued Books");
+            currentForm_label.setText("Borrow a book");
             issue_form.setVisible(true);
             availableBook_form.setVisible(false);
             savedBooks_form.setVisible(false);
@@ -322,6 +422,7 @@ public class DashboardController implements Initializable {
             availableBook_form.setVisible(false);
             savedBooks_form.setVisible(false);
             returnBooks_form.setVisible(true);
+            showReturnBooks();
         }
 
     }
@@ -348,5 +449,6 @@ public class DashboardController implements Initializable {
         showPatronEmail();
         selectTransactionType();
         issuedDate();
+        showReturnBooks();
     }
 }
