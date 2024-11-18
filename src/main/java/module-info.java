@@ -9,4 +9,8 @@ module com.amalitech.librarymanagementsystem {
 
     opens com.amalitech.librarymanagementsystem to javafx.fxml;
     exports com.amalitech.librarymanagementsystem;
+    exports com.amalitech.librarymanagementsystem.dto;
+    opens com.amalitech.librarymanagementsystem.dto to javafx.fxml;
+    exports com.amalitech.librarymanagementsystem.controller;
+    opens com.amalitech.librarymanagementsystem.controller to javafx.fxml;
 }

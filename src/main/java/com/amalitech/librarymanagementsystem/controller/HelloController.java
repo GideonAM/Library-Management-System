@@ -1,6 +1,8 @@
-package com.amalitech.librarymanagementsystem;
+package com.amalitech.librarymanagementsystem.controller;
 
+import com.amalitech.librarymanagementsystem.HelloApplication;
 import com.amalitech.librarymanagementsystem.database.DatabaseConnection;
+import com.amalitech.librarymanagementsystem.dto.GetData;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

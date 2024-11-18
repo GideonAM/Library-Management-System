@@ -1,6 +1,10 @@
-package com.amalitech.librarymanagementsystem;
+package com.amalitech.librarymanagementsystem.controller;
 
+import com.amalitech.librarymanagementsystem.HelloApplication;
 import com.amalitech.librarymanagementsystem.database.DatabaseConnection;
+import com.amalitech.librarymanagementsystem.dto.AvailableBooks;
+import com.amalitech.librarymanagementsystem.dto.GetData;
+import com.amalitech.librarymanagementsystem.dto.ReturnBook;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
