@@ -18,11 +18,6 @@
          <top>
             <AnchorPane prefHeight="75.0" prefWidth="986.0" BorderPane.alignment="CENTER">
                <children>
-                  <Button layoutX="39.0" layoutY="36.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="46.0" text="&lt;" textAlignment="CENTER">
-                     <font>
-                        <Font size="15.0" />
-                     </font>
-                  </Button>
                   <Label layoutX="96.0" layoutY="43.0" text="LIBRARY MANAGEMENT SYSTEM">
                      <font>
                         <Font size="15.0" />
