@@ -9,7 +9,20 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="469.0" prefWidth="691.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.amalitech.librarymanagementsystem.controller.HelloController">
    <children>
-      <AnchorPane layoutX="82.0" layoutY="56.0" prefHeight="358.0" prefWidth="529.0">
+      <AnchorPane fx:id="register_form" layoutX="82.0" layoutY="56.0" prefHeight="358.0" prefWidth="529.0">
+         <children>
+            <Label layoutX="219.0" layoutY="69.0" text="REGISTER">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <TextField fx:id="register_email_field" layoutX="190.0" layoutY="153.0" promptText="email" />
+            <Button fx:id="sign_up_field" layoutX="233.0" layoutY="258.0" mnemonicParsing="false" onAction="#register" text="Sign up" />
+            <PasswordField fx:id="register_password_field" layoutX="187.0" layoutY="208.0" promptText="password" />
+            <Button fx:id="sign_in_here_btn" layoutX="222.0" layoutY="303.0" mnemonicParsing="false" onAction="#signInHereBtn" text="Sign in here" />
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="login_form" layoutX="92.0" layoutY="66.0" prefHeight="358.0" prefWidth="529.0" visible="false">
          <children>
             <Label layoutX="235.0" layoutY="75.0" text="LOGIN">
                <font>
@@ -17,8 +30,9 @@
                </font>
             </Label>
             <TextField fx:id="email_field" layoutX="190.0" layoutY="153.0" promptText="email" />
-            <Button fx:id="login_field" layoutX="238.0" layoutY="279.0" mnemonicParsing="false" onAction="#login" text="Login" />
+            <Button fx:id="login_field" layoutX="239.0" layoutY="256.0" mnemonicParsing="false" onAction="#login" text="Login" />
             <PasswordField fx:id="password_field" layoutX="187.0" layoutY="208.0" promptText="password" />
+            <Button fx:id="register_here_btn" layoutX="221.0" layoutY="304.0" mnemonicParsing="false" onAction="#registerHereBtn" text="Register here" />
          </children>
       </AnchorPane>
    </children>
